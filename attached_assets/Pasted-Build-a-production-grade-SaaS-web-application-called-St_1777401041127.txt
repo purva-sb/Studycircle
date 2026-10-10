@@ -1,0 +1,389 @@
+Build a production-grade SaaS web application called **StudyCircle** — the ultimate social learning, focus, and exam-preparation platform for serious students preparing for competitive exams like GATE, JEE, NEET, CAT, UPSC, placements, and university exams.
+
+---
+
+# Core Vision
+
+StudyCircle combines the best elements of Yeolpumta, Discord, Microsoft Teams, and Testbook into one unified platform.
+
+Students should be able to:
+
+* Track study time
+* Join live focus rooms
+* Collaborate with peers
+* Participate in study communities
+* Attempt mock tests
+* Analyze performance
+* Build streaks
+* Earn XP
+* Stay accountable
+
+The goal is to help students become consistent, competitive, and connected.
+
+---
+
+# Tech Stack
+
+* Frontend: React + TypeScript + Vite
+* Backend: Node.js + Express
+* Database: PostgreSQL
+* ORM: Prisma
+* Authentication: Clerk
+* Real-time Communication: Socket.IO
+* Voice/Video/Screen Sharing: LiveKit
+* State Management: Zustand + TanStack Query
+* UI Components: Tailwind CSS + ShadCN UI
+* Rich Text Editor: TipTap
+* Collaborative Editing: Yjs
+* Calendar: FullCalendar
+* Whiteboard: Excalidraw
+* Animations: Framer Motion
+* Deployment: Vercel + Railway/Supabase
+
+---
+
+# Main Product Modules
+
+## 1. Authentication
+
+* Clerk Sign Up / Sign In
+* Google OAuth
+* GitHub OAuth
+* Protected Routes
+* User Onboarding
+
+---
+
+## 2. Dashboard
+
+* Daily Study Time
+* Weekly Progress
+* Active Streak
+* XP Level
+* Upcoming Exams
+* Today's Goals
+* Recent Activity
+
+---
+
+## 3. Study Timer
+
+* Pomodoro Mode
+* Stopwatch Mode
+* Subject Selection
+* Session Notes
+* Background Tracking
+* Auto Logging
+* Daily Targets
+
+---
+
+## 4. Study Circles
+
+Create or join public/private communities.
+
+Features:
+
+* Invite links
+* Role-based permissions
+* Member management
+* Circle discovery
+
+---
+
+## 5. Teams-Inspired Circle Workspace
+
+Each Study Circle must include:
+
+### Channels
+
+* General
+* Doubts
+* Resources
+* Announcements
+* Mock Tests
+* Off Topic
+
+### Features
+
+* Threaded conversations
+* Mentions
+* Emoji reactions
+* Pinned messages
+* Rich text messaging
+
+---
+
+## 6. Focus Rooms
+
+Live collaborative study rooms powered by LiveKit.
+
+Features:
+
+* Voice chat
+* Screen sharing
+* Optional webcam
+* Shared Pomodoro timer
+* Participant status
+* Silent study mode
+
+---
+
+## 7. Resource Hub
+
+Each circle should have a dedicated library.
+
+* Upload PDFs
+* Notes
+* PYQs
+* Important links
+* Folder organization
+* Search functionality
+* Permission controls
+
+---
+
+## 8. Shared Calendar
+
+* Mock test schedules
+* Group study sessions
+* Mentor classes
+* Revision marathons
+* Recurring events
+* Google Calendar sync
+
+---
+
+## 9. Collaborative Notes
+
+Real-time shared notes.
+
+* Multi-user editing
+* Rich text
+* Code blocks
+* LaTeX equations
+* Version history
+* Export to PDF
+
+---
+
+## 10. Exam Engine
+
+GateOverflow/Testbook-style testing platform.
+
+### Exam Types
+
+* Practice Tests
+* Timed Tests
+* Full-Length Mocks
+* Scheduled Exams
+* Live Contests
+* Previous Year Papers
+
+### Interface
+
+* Question palette
+* Timer
+* Mark for review
+* Save & Next
+* Auto-save
+* Auto-submit
+* Negative marking
+* Fullscreen mode
+
+---
+
+## 11. Exam Analytics
+
+* Accuracy
+* Percentile
+* Rank
+* Topic-wise analysis
+* Time spent
+* Weak areas
+* Progress trends
+
+---
+
+## 12. Question Management (Admin)
+
+* Create questions
+* MCQ/MSQ/NAT support
+* Difficulty levels
+* Topic tagging
+* Explanation editor
+* Image upload
+* Bulk import
+
+---
+
+## 13. Accountability Pods
+
+Small private groups of 3–6 students.
+
+* Daily goals
+* Weekly reviews
+* Shared streaks
+* Pod leaderboards
+
+---
+
+## 14. Doubt Bounties
+
+* Ask questions
+* Community answers
+* Upvotes
+* Reward best answer with XP
+
+---
+
+## 15. Revision Planner
+
+* Spaced repetition
+* Smart reminders
+* Topic revisit scheduling
+* Forgetting curve optimization
+
+---
+
+## 16. Gamification
+
+* XP System
+* Levels
+* Streaks
+* Badges
+* Weekly Leaderboards
+* Monthly Challenges
+
+---
+
+# Sidebar Navigation
+
+* Dashboard
+* Timer
+* Study Circles
+* Focus Rooms
+* Exams
+* Analytics
+* Revision Planner
+* Leaderboards
+* Resources
+* Profile
+* Settings
+
+---
+
+# Database Models
+
+Design complete schemas for:
+
+* Users
+* StudySessions
+* Circles
+* CircleMembers
+* Channels
+* Messages
+* Threads
+* VoiceRooms
+* Resources
+* Notes
+* CalendarEvents
+* Exams
+* Questions
+* ExamAttempts
+* UserAnswers
+* Leaderboards
+* Achievements
+* XPTransactions
+* Pods
+* Doubts
+
+---
+
+# UI/UX Requirements
+
+* Modern SaaS design
+* Fully responsive
+* Dark/Light mode
+* Glassmorphism aesthetics
+* Smooth animations
+* Skeleton loaders
+* Empty states
+* Mobile-first approach
+
+---
+
+# Security
+
+* Clerk authentication
+* Zod validation
+* Role-based access
+* Secure APIs
+* Anti-cheat exam protection
+* Rate limiting
+
+---
+
+# Performance
+
+* Real-time synchronization
+* Optimistic UI updates
+* Lazy loading
+* Efficient caching
+* Scalable architecture
+
+---
+
+# Monetization
+
+## Free Plan
+
+* Basic timer
+* Join public circles
+* Limited mock tests
+
+## Pro Plan
+
+* Unlimited tests
+* Private circles
+* Advanced analytics
+* Collaborative notes
+* Premium badges
+* Priority support
+
+---
+
+# Landing Page
+
+Create a world-class landing page featuring:
+
+* Hero section
+* Feature showcase
+* Testimonials
+* Pricing
+* FAQ
+* Call to action
+
+---
+
+# Design Inspiration
+
+* Yeolpumta
+* Discord
+* Microsoft Teams
+* Linear
+* Testbook
+
+---
+
+# Important Requirements
+
+* Generate production-ready code.
+* Ensure zero TypeScript errors.
+* Ensure zero runtime errors.
+* Follow best practices.
+* Write modular, scalable code.
+* Include seed data.
+* Optimize for high retention.
+* Focus on exceptional UX.
+* Build for scale from day one.

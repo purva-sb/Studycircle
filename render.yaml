@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: studycircle
+    runtime: node
+    plan: free
+    buildCommand: |
+      npm install -g pnpm &&
+      pnpm install --frozen-lockfile &&
+      pnpm --prefix artifacts/studycircle run build:prod &&
+      pnpm --prefix artifacts/api-server run build
+    startCommand: node artifacts/api-server/dist/index.mjs
+    envVars:
+      - key: NODE_VERSION
+        value: "20.11.1"
+      - key: PORT
+        value: "5000"
+      - key: DATABASE_URL
+        sync: false
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: VITE_CLERK_PUBLISHABLE_KEY
+        sync: false

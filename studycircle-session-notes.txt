@@ -1,0 +1,35 @@
+========================================================
+STUDYCIRCLE DEVELOPMENT SESSION NOTES
+Date: May 20, 2026
+========================================================
+
+1. BUGS FIXED IN THIS SESSION:
+--------------------------------------------------------
+- Direct Messages (DMs) Crashing: Fixed the SQL query in `GET /api/dms` and the response shape in `POST /dms` which were causing the UI to break.
+- DM Profile Padding: Adjusted the CSS in `dms.tsx` to reduce the padding and make the chat bubbles less bulky and much sleeker.
+- Channel Creation Exploit: Fixed the UI and Backend so that ONLY Owners, Co-Owners, Co-Leaders, and Moderators can create text or voice channels.
+- 500 Internal Server Errors on Render: Fixed a massive issue where the API crashed trying to load Circles. The Zod schemas for the API were strictly rejecting our custom database roles (like "co-owner") and rejecting our new channel kind ("voice"). Both schemas and endpoints have been safely patched.
+
+2. VOICE CHANNELS (REPLACED JITSI WITH WEBRTC):
+--------------------------------------------------------
+- We completely removed the Jitsi iframe because it was irritating and bulky.
+- We built a native WebRTC component (`voice-channel-room.tsx`).
+- How it works: It asks for microphone permission, uses your existing Socket.io backend to perform "signaling" (exchanging connection info between users), and then forms direct Peer-to-Peer (Mesh) connections between users' browsers. 
+- Cost: $0 (Completely Free).
+- Capacity: Works flawlessly for 1-8 users. Starts to strain computer CPUs and bandwidth around 15 users. Will break for 20+ users. Perfect for small, intimate study groups!
+
+3. FUTURE LIVEKIT INTEGRATION (FOR 50+ USERS):
+--------------------------------------------------------
+- Why did LiveKit crash previously? It likely crashed due to a Vite build error (it requires modern JS top-level await features), missing environment keys (LIVEKIT_API_KEY/SECRET), or React StrictMode causing double connections that got blocked.
+- How we will add it later:
+  1. Install `livekit-server-sdk` on the Render backend to securely generate room tokens.
+  2. Install `@livekit/components-react` on the frontend.
+  3. Replace the native WebRTC code in `voice-channel-room.tsx` with the `<LiveKitRoom>` component.
+  4. Plug in API keys from a free LiveKit Cloud account.
+
+4. WHAT TO DO NEXT (WHEN YOU RETURN):
+--------------------------------------------------------
+1. Verify the Render deployment finished successfully.
+2. Go into a Circle you own, create a Voice Channel, and test it!
+3. Check your Direct Messages to see the new, sleeker chat bubbles.
+4. Let me know what feature you want to build next!

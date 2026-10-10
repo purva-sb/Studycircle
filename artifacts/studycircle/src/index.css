@@ -1,0 +1,697 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-border: var(--primary-border);
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary-border: var(--secondary-border);
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted-border: var(--muted-border);
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-border: var(--accent-border);
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-border: var(--destructive-border);
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-primary-border: var(--sidebar-primary-border);
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-accent-border: var(--sidebar-accent-border);
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* LIGHT MODE */
+:root {
+  --button-outline: rgba(0,0,0, .10);
+  --badge-outline: rgba(0,0,0, .05);
+
+  --opaque-button-border-intensity: -8;
+
+  --elevate-1: rgba(0,0,0, .03);
+  --elevate-2: rgba(0,0,0, .08);
+
+  --background: 240 20% 98%;
+  --foreground: 240 10% 10%;
+  --border: 240 10% 90%;
+  --input: 240 10% 90%;
+  --ring: 250 80% 60%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 10%;
+  --card-border: 240 10% 90%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 10%;
+  --popover-border: 240 10% 90%;
+
+  --primary: 250 80% 60%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 240 10% 92%;
+  --secondary-foreground: 240 10% 20%;
+
+  --muted: 240 10% 95%;
+  --muted-foreground: 240 10% 40%;
+
+  --accent: 250 80% 95%;
+  --accent-foreground: 250 80% 30%;
+
+  --destructive: 0 80% 50%;
+  --destructive-foreground: 0 0% 100%;
+
+  --chart-1: 250 80% 60%;
+  --chart-2: 190 90% 50%;
+  --chart-3: 340 80% 60%;
+  --chart-4: 45 90% 50%;
+  --chart-5: 160 70% 40%;
+
+  --sidebar: 0 0% 100%;
+  --sidebar-foreground: 240 10% 30%;
+  --sidebar-border: 240 10% 90%;
+  --sidebar-primary: 250 80% 60%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 240 10% 95%;
+  --sidebar-accent-foreground: 240 10% 10%;
+  --sidebar-ring: 250 80% 60%;
+
+  --app-font-sans: 'Inter', sans-serif;
+  --app-font-serif: Georgia, serif;
+  --app-font-mono: Menlo, monospace;
+  --radius: 0.75rem;
+  
+  --shadow-2xs: 0px 2px 0px 0px rgba(0,0,0,0.02);
+  --shadow-xs: 0px 2px 0px 0px rgba(0,0,0,0.03);
+  --shadow-sm: 0px 2px 0px 0px rgba(0,0,0,0.04), 0px 1px 2px -1px rgba(0,0,0,0.03);
+  --shadow: 0px 2px 0px 0px rgba(0,0,0,0.05), 0px 1px 2px -1px rgba(0,0,0,0.04);
+  --shadow-md: 0px 2px 0px 0px rgba(0,0,0,0.06), 0px 2px 4px -1px rgba(0,0,0,0.05);
+  --shadow-lg: 0px 2px 0px 0px rgba(0,0,0,0.07), 0px 4px 6px -1px rgba(0,0,0,0.06);
+  --shadow-xl: 0px 2px 0px 0px rgba(0,0,0,0.08), 0px 8px 10px -1px rgba(0,0,0,0.07);
+  --shadow-2xl: 0px 2px 0px 0px rgba(0,0,0,0.1);
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+
+  --sidebar-primary-border: hsl(from hsl(var(--sidebar-primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --sidebar-accent-border: hsl(from hsl(var(--sidebar-accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --primary-border: hsl(from hsl(var(--primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --secondary-border: hsl(from hsl(var(--secondary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --muted-border: hsl(from hsl(var(--muted)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --accent-border: hsl(from hsl(var(--accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+}
+
+.dark {
+  --button-outline: rgba(255,255,255, .08);
+  --badge-outline: rgba(255,255,255, .04);
+
+  --opaque-button-border-intensity: 9;
+
+  --elevate-1: rgba(255,255,255, .025);
+  --elevate-2: rgba(255,255,255, .06);
+
+  /* Zinc-950 base — matches #09090B */
+  --background:  240 5.9% 4%;      /* zinc-950 */
+  --foreground:  240 5% 96%;        /* zinc-50 */
+  --border:      240 3.7% 15.9%;    /* zinc-800 */
+  --input:       240 3.7% 15.9%;
+  --ring:        239 84% 67%;       /* indigo-500 */
+
+  /* Cards — zinc-900 */
+  --card:           240 5.9% 10%;
+  --card-foreground: 240 5% 96%;
+  --card-border:     240 3.7% 15.9%;
+
+  --popover:           240 5.9% 10%;
+  --popover-foreground: 240 5% 96%;
+  --popover-border:    240 3.7% 15.9%;
+
+  /* Indigo primary */
+  --primary:            239 84% 67%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Zinc-800 secondary */
+  --secondary:           240 3.7% 15.9%;
+  --secondary-foreground: 240 5% 96%;
+
+  /* Zinc-900 muted */
+  --muted:            240 5.9% 10%;
+  --muted-foreground: 240 3.8% 46.1%;   /* zinc-500 */
+
+  /* Indigo accent */
+  --accent:           239 84% 67% / 0.1;
+  --accent-foreground: 239 84% 80%;
+
+  --destructive:           0 72.2% 50.6%;
+  --destructive-foreground: 0 0% 100%;
+
+  /* Charts */
+  --chart-1: 239 84% 67%;
+  --chart-2: 189 94% 43%;
+  --chart-3: 340 75% 60%;
+  --chart-4:  45 93% 58%;
+  --chart-5: 142 71% 45%;
+
+  /* Sidebar — same as background */
+  --sidebar:                   240 5.9% 4%;
+  --sidebar-foreground:        240 3.8% 46.1%;
+  --sidebar-border:            240 3.7% 15.9%;
+  --sidebar-primary:           239 84% 67%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent:            240 3.7% 15.9%;
+  --sidebar-accent-foreground: 240 5% 96%;
+  --sidebar-ring:              239 84% 67%;
+}
+
+/* Midnight Purple Theme */
+.theme-midnight {
+  --background: 260 40% 6%;
+  --foreground: 260 20% 96%;
+  --border: 260 20% 15%;
+  --input: 260 20% 15%;
+  --ring: 260 60% 60%;
+  --card: 260 40% 8%;
+  --card-foreground: 260 20% 96%;
+  --card-border: 260 20% 15%;
+  --popover: 260 40% 8%;
+  --popover-foreground: 260 20% 96%;
+  --popover-border: 260 20% 15%;
+  --primary: 260 60% 60%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 260 20% 15%;
+  --secondary-foreground: 260 20% 96%;
+  --muted: 260 20% 12%;
+  --muted-foreground: 260 10% 60%;
+  --accent: 260 60% 60% / 0.1;
+  --accent-foreground: 260 60% 80%;
+  --destructive: 0 72.2% 50.6%;
+  --destructive-foreground: 0 0% 100%;
+  --sidebar: 260 40% 6%;
+  --sidebar-foreground: 260 10% 60%;
+  --sidebar-border: 260 20% 15%;
+  --sidebar-primary: 260 60% 60%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 260 20% 15%;
+  --sidebar-accent-foreground: 260 20% 96%;
+  --sidebar-ring: 260 60% 60%;
+}
+
+/* Cyberpunk Theme */
+.theme-cyberpunk {
+  --background: 280 60% 6%;
+  --foreground: 50 100% 50%;
+  --border: 320 100% 40%;
+  --input: 320 100% 40%;
+  --ring: 180 100% 50%;
+  --card: 280 60% 8%;
+  --card-foreground: 50 100% 50%;
+  --card-border: 320 100% 40%;
+  --popover: 280 60% 8%;
+  --popover-foreground: 50 100% 50%;
+  --popover-border: 320 100% 40%;
+  --primary: 180 100% 50%;
+  --primary-foreground: 280 60% 6%;
+  --secondary: 320 100% 40% / 0.2;
+  --secondary-foreground: 320 100% 60%;
+  --muted: 280 60% 12%;
+  --muted-foreground: 280 40% 60%;
+  --accent: 320 100% 50% / 0.2;
+  --accent-foreground: 320 100% 60%;
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --sidebar: 280 60% 6%;
+  --sidebar-foreground: 280 40% 60%;
+  --sidebar-border: 320 100% 40%;
+  --sidebar-primary: 180 100% 50%;
+  --sidebar-primary-foreground: 280 60% 6%;
+  --sidebar-accent: 320 100% 40% / 0.2;
+  --sidebar-accent-foreground: 320 100% 60%;
+  --sidebar-ring: 180 100% 50%;
+}
+
+/* Zen Green Theme */
+.theme-zen {
+  --background: 140 15% 10%;
+  --foreground: 140 20% 90%;
+  --border: 140 10% 20%;
+  --input: 140 10% 20%;
+  --ring: 140 40% 50%;
+  --card: 140 15% 12%;
+  --card-foreground: 140 20% 90%;
+  --card-border: 140 10% 20%;
+  --popover: 140 15% 12%;
+  --popover-foreground: 140 20% 90%;
+  --popover-border: 140 10% 20%;
+  --primary: 140 40% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 140 10% 20%;
+  --secondary-foreground: 140 20% 90%;
+  --muted: 140 10% 16%;
+  --muted-foreground: 140 10% 60%;
+  --accent: 140 40% 50% / 0.15;
+  --accent-foreground: 140 40% 70%;
+  --destructive: 0 72% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --sidebar: 140 15% 10%;
+  --sidebar-foreground: 140 10% 60%;
+  --sidebar-border: 140 10% 20%;
+  --sidebar-primary: 140 40% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 140 10% 20%;
+  --sidebar-accent-foreground: 140 20% 90%;
+  --sidebar-ring: 140 40% 50%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+/**
+ * Using the elevate system.
+ * Automatic contrast adjustment.
+ *
+ * <element className="hover-elevate" />
+ * <element className="active-elevate-2" />
+ *
+ * // Using the tailwind utility when a data attribute is "on"
+ * <element className="toggle-elevate data-[state=on]:toggle-elevated" />
+ * // Or manually controlling the toggle state
+ * <element className="toggle-elevate toggle-elevated" />
+ *
+ * Elevation systems have to handle many states.
+ * - not-hovered, vs. hovered vs. active  (three mutually exclusive states)
+ * - toggled or not
+ * - focused or not (this is not handled with these utilities)
+ *
+ * Even without handling focused or not, this is six possible combinations that
+ * need to be distinguished from eachother visually.
+ */
+@layer utilities {
+
+  /* Hide ugly search cancel button in Chrome until we can style it properly */
+  input[type="search"]::-webkit-search-cancel-button {
+    @apply hidden;
+  }
+
+  /* Placeholder styling for contentEditable div */
+  [contenteditable][data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: hsl(var(--muted-foreground));
+    pointer-events: none;
+  }
+
+  /* .no-default-hover-elevate/no-default-active-elevate is an escape hatch so consumers of
+   * buttons/badges can remove the automatic brightness adjustment on interactions
+   * and program their own. */
+  .no-default-hover-elevate {}
+
+  .no-default-active-elevate {}
+
+
+  /**
+   * Toggleable backgrounds go behind the content. Hoverable/active goes on top.
+   * This way they can stack/compound. Both will overlap the parent's borders!
+   * So borders will be automatically adjusted both on toggle, and hover/active,
+   * and they will be compounded.
+   */
+  .toggle-elevate::before,
+  .toggle-elevate-2::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    /*border-radius: inherit;   match rounded corners */
+    border-radius: inherit;
+    z-index: -1;
+    /* sits behind content but above backdrop */
+  }
+
+  .toggle-elevate.toggle-elevated::before {
+    background-color: var(--elevate-2);
+  }
+
+  /* If there's a 1px border, adjust the inset so that it covers that parent's border */
+  .border.toggle-elevate::before {
+    inset: -1px;
+  }
+
+  /* Does not work on elements with overflow:hidden! */
+  .hover-elevate:not(.no-default-hover-elevate),
+  .active-elevate:not(.no-default-active-elevate),
+  .hover-elevate-2:not(.no-default-hover-elevate),
+  .active-elevate-2:not(.no-default-active-elevate) {
+    position: relative;
+    z-index: 0;
+  }
+
+  .hover-elevate:not(.no-default-hover-elevate)::after,
+  .active-elevate:not(.no-default-active-elevate)::after,
+  .hover-elevate-2:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:not(.no-default-active-elevate)::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    /*border-radius: inherit;   match rounded corners */
+    border-radius: inherit;
+    z-index: 999;
+    /* sits in front of content */
+  }
+
+  .hover-elevate:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate:active:not(.no-default-active-elevate)::after {
+    background-color: var(--elevate-1);
+  }
+
+  .hover-elevate-2:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:active:not(.no-default-active-elevate)::after {
+    background-color: var(--elevate-2);
+  }
+
+  /* If there's a 1px border, adjust the inset so that it covers that parent's border */
+  .border.hover-elevate:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate:not(.no-active-interaction-elevate)::after,
+  .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate-2:not(.no-active-interaction-elevate)::after,
+  .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
+    inset: -1px;
+  }
+}
+
+/* ==========================================================================
+   LiveKit Custom Grid Theme (Glassmorphic & Rounded)
+   ========================================================================== */
+.studycircle-livekit-theme {
+  --lk-bg: transparent;
+  --lk-control-bg: rgba(20, 20, 42, 0.7);
+  --lk-control-hover-bg: rgba(40, 40, 70, 0.8);
+  --lk-control-active-bg: rgba(139, 92, 246, 0.9);
+  --lk-control-active-hover-bg: rgba(124, 58, 237, 1);
+  --lk-control-fg: #f8fafc;
+  --lk-danger: #ef4444;
+  
+  --lk-border-radius: 1.5rem; /* rounded-3xl for the main wrapper */
+}
+
+/* Make the video grid background transparent so our custom gradient shows through */
+.studycircle-livekit-theme .lk-video-conference,
+.studycircle-livekit-theme .lk-focus-layout,
+.studycircle-livekit-theme .lk-grid-layout {
+  background: transparent !important;
+}
+
+/* Style individual participant tiles to be rounded and distinct */
+.studycircle-livekit-theme .lk-participant-tile {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Active speaker glow effect instead of a flat border */
+.studycircle-livekit-theme .lk-participant-tile[data-lk-speaking="true"] {
+  border-color: rgba(139, 92, 246, 0.8) !important;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), inset 0 0 10px rgba(139, 92, 246, 0.2);
+}
+
+/* Re-style the floating control bar to look glassmorphic */
+.studycircle-livekit-theme .lk-control-bar {
+  background: rgba(20, 20, 42, 0.6) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px !important;
+  padding: 8px 16px !important;
+  margin: 16px auto !important;
+  width: max-content;
+  gap: 8px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+/* LiveKit overrides removed in favor of CustomVideoLayout Tailwind styling */
+
+/* Tile nameplates */
+.studycircle-livekit-theme .lk-participant-nameplate {
+  background: rgba(0,0,0,0.5) !important;
+  backdrop-filter: blur(4px);
+  border-radius: 12px;
+  padding: 4px 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* 3D Transform Utilities for Flashcards */
+@layer utilities {
+  .perspective-\[1000px\] {
+    perspective: 1000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+}
+
+/* ==========================================================================
+   Gamification Auras (Daily Heat) — Keyframes (must be at top level)
+   ========================================================================== */
+@keyframes aura-pulse {
+  0% { box-shadow: 0 0 10px 2px rgba(6, 182, 212, 0.35); }
+  100% { box-shadow: 0 0 22px 6px rgba(6, 182, 212, 0.65); }
+}
+
+@keyframes aura-throb {
+  0% { box-shadow: 0 0 14px 3px rgba(168, 85, 247, 0.4); }
+  100% { box-shadow: 0 0 28px 8px rgba(168, 85, 247, 0.75); }
+}
+
+@keyframes aura-flicker {
+  0%   { box-shadow: 0 0 16px 4px rgba(249, 115, 22, 0.5); opacity: 1; }
+  30%  { box-shadow: 0 0 30px 8px rgba(249, 115, 22, 0.8); opacity: 0.9; }
+  60%  { box-shadow: 0 0 12px 3px rgba(249, 115, 22, 0.4); opacity: 1; }
+  100% { box-shadow: 0 0 26px 7px rgba(249, 115, 22, 0.7); opacity: 0.95; }
+}
+
+@keyframes aura-neon {
+  0%, 100% { box-shadow: 0 0 18px 5px rgba(236, 72, 153, 0.55); filter: hue-rotate(0deg); }
+  33%       { box-shadow: 0 0 32px 9px rgba(236, 72, 153, 0.8);  filter: hue-rotate(20deg); }
+  66%       { box-shadow: 0 0 14px 4px rgba(236, 72, 153, 0.4);  filter: hue-rotate(-20deg); }
+}
+
+@keyframes aura-legend {
+  0%   { box-shadow: 0 0 24px 6px rgba(234,179,8,0.6),  0 0 60px 15px rgba(234,179,8,0.15); }
+  50%  { box-shadow: 0 0 48px 14px rgba(250,204,21,0.9), 0 0 90px 25px rgba(250,204,21,0.25); }
+  100% { box-shadow: 0 0 24px 6px rgba(234,179,8,0.6),  0 0 60px 15px rgba(234,179,8,0.15); }
+}
+
+@keyframes aura-spin-ring {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Aura Utility Classes
+   ========================================================================== */
+@layer utilities {
+  /* Base: all aura avatars need rounded-full and relative positioning */
+  .aura-wrapper {
+    position: relative;
+    display: inline-block;
+    border-radius: 9999px;
+  }
+
+  /* Tier 1 — Cyan Pulse (≥1h) */
+  .aura-tier-1 {
+    border-color: rgba(6, 182, 212, 0.9) !important;
+    animation: aura-pulse 2.5s ease-in-out infinite alternate;
+  }
+
+  /* Tier 2 — Purple Glow (≥3h): spinning conic-gradient ring via outline trick */
+  .aura-tier-2 {
+    border-color: rgba(168, 85, 247, 0.9) !important;
+    animation: aura-throb 2s ease-in-out infinite alternate;
+  }
+
+  /* Tier 3 — Orange Flicker (≥5h) */
+  .aura-tier-3 {
+    border-color: rgba(249, 115, 22, 1) !important;
+    animation: aura-flicker 0.9s ease-in-out infinite;
+  }
+
+  /* Tier 4 — Pink Neon (≥9h) */
+  .aura-tier-4 {
+    border-color: rgba(236, 72, 153, 1) !important;
+    animation: aura-neon 1.8s ease-in-out infinite;
+  }
+
+  /* Legend — Gold Radiant (≥10h) */
+  .aura-legend {
+    border-color: rgba(250, 204, 21, 1) !important;
+    animation: aura-legend 1.5s ease-in-out infinite;
+  }
+
+  /* Custom Scrollbar for small areas like Time Picker */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  }
+}
+
+/* ─── Driver.js tour — dark theme overrides ─────────────────────────────────── */
+
+.sc-tour-popover.driver-popover {
+  background-color: hsl(222 47% 8%) !important;
+  border: 1px solid rgba(99, 102, 241, 0.35) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(99, 102, 241, 0.15) !important;
+  padding: 18px 20px 14px !important;
+  max-width: 320px !important;
+}
+
+.sc-tour-popover .driver-popover-title {
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  margin-bottom: 6px !important;
+}
+
+.sc-tour-popover .driver-popover-description {
+  color: rgba(255, 255, 255, 0.65) !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+}
+
+.sc-tour-popover .driver-popover-progress-text {
+  color: rgba(99, 102, 241, 0.8) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+.sc-tour-popover .driver-popover-footer {
+  margin-top: 14px !important;
+}
+
+.sc-tour-popover .driver-popover-prev-btn,
+.sc-tour-popover .driver-popover-next-btn,
+.sc-tour-popover .driver-popover-done-btn {
+  background-color: #4f46e5 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 6px 14px !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  user-select: none !important;
+  transition: background-color 0.15s !important;
+}
+
+.sc-tour-popover .driver-popover-prev-btn {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.sc-tour-popover .driver-popover-prev-btn:hover {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.sc-tour-popover .driver-popover-next-btn:hover,
+.sc-tour-popover .driver-popover-done-btn:hover {
+  background-color: #4338ca !important;
+}
+
+.sc-tour-popover .driver-popover-close-btn {
+  color: rgba(255, 255, 255, 0.35) !important;
+  font-size: 18px !important;
+  top: 12px !important;
+  right: 14px !important;
+}
+
+.sc-tour-popover .driver-popover-close-btn:hover {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.sc-tour-popover .driver-popover-arrow-side-left.driver-popover-arrow {
+  border-right-color: hsl(222 47% 8%) !important;
+}
+.sc-tour-popover .driver-popover-arrow-side-right.driver-popover-arrow {
+  border-left-color: hsl(222 47% 8%) !important;
+}
+.sc-tour-popover .driver-popover-arrow-side-top.driver-popover-arrow {
+  border-bottom-color: hsl(222 47% 8%) !important;
+}
+.sc-tour-popover .driver-popover-arrow-side-bottom.driver-popover-arrow {
+  border-top-color: hsl(222 47% 8%) !important;
+}

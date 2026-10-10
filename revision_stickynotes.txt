@@ -1,0 +1,144 @@
+STUDYCIRCLE — STICKY NOTES & PERSONAL STUDY SPACE
+Discussion Notes
+Date: 2026-05-28
+=======================================================
+
+
+FEATURE VISION
+--------------
+A Personal Study Space for students — not just sticky notes, but a full
+knowledge workspace built into StudyCircle. Three layers:
+
+  Layer 1 — Quick Capture   →  Sticky Notes (dashboard widget)
+  Layer 2 — Deep Notes      →  Rich notes: text + images + audio
+  Layer 3 — Visual Thinking →  Mind maps / concept maps
+
+All three live under one place — "My Notes" or "Study Space" in the sidebar.
+
+
+WHY STUDENTS WILL USE IT
+-------------------------
+Real pain points this solves:
+
+1. "I keep forgetting the same thing over and over"
+   → Sticky notes always visible on dashboard. Passive revision every login.
+
+2. "I had a great insight and lost it"
+   → Quick-add from anywhere in the app captures the moment with zero friction.
+
+3. "I don't know what to review 30 mins before the exam"
+   → Filter all notes by exam/subject — their own curated cram list.
+
+Emotional hook: Students see THEIR OWN WORDS back at them every time they
+open the app. It feels personal, like their own study desk. That's the
+difference between a feature used once vs. a daily habit.
+
+
+FULL FEATURE BREAKDOWN
+-----------------------
+
+Sticky Notes (Layer 1):
+  - Quick-add from dashboard — type + pick color + press enter
+  - Color coded by subject (Physics=blue, History=yellow, etc.)
+  - One note can be "pinned" — always visible at top
+  - Daily random note surfaced on dashboard login
+  - Pre-exam pack — filter all notes by exam, one-tap view before test day
+
+Rich Notes (Layer 2):
+  - Full text editor (Tiptap)
+  - Attach images — photos of textbook diagrams, handwritten pages, whiteboards
+  - Audio recording — record yourself explaining a concept (retrieval practice)
+  - Organized by subject/exam
+
+Mind Maps (Layer 3):
+  - Visual concept mapping — connect all topics in a chapter
+  - Attach images or notes to nodes
+  - Great for UPSC, History, Biology (large interconnected syllabi)
+  - Built with React Flow
+
+
+STUDENT USE CASE EXAMPLE (Organic Chemistry):
+  1. Create a mind map of all reaction types
+  2. Attach a photo of a mechanism from textbook to a node
+  3. Record a voice note explaining it in their own words
+  4. Pull the most important rule out as a sticky note on the dashboard
+  → Complete study loop, all inside StudyCircle
+
+
+COMPETITIVE ADVANTAGE
+----------------------
+No exam prep app gives students a proper knowledge workspace today:
+  - Anki       → only flashcards
+  - Notion     → too generic, not exam-focused
+  - StudyCircle → flashcards + notes + images + audio + mind maps,
+                  all connected to your circles, exams, and study sessions
+
+
+BUILD PLAN (PHASED)
+--------------------
+
+v1 — Sticky Notes (2-3 days):
+  - Quick-add on dashboard
+  - Color picker (by subject)
+  - Pin one note
+  - Daily random note on login
+
+v2 — My Notes Page (3-4 days):
+  - Rich text notes with Tiptap editor
+  - Image attachment
+  - Organized by subject/exam
+  - Backend: notes table, file storage (Cloudflare R2)
+
+v3 — Audio Recording (4-6 days):
+  - Browser MediaRecorder API
+  - File storage + playback UI
+  - Attached inside notes
+
+v4 — Mind Map Builder (7-10 days):
+  - React Flow for graph rendering
+  - Custom node types
+  - Save/load graph data model
+  - Attach images/notes to nodes
+
+Total estimated build time: ~4-5 weeks (full-time, focused)
+
+
+INFRASTRUCTURE & RUNNING COSTS
+--------------------------------
+
+Cost drivers:
+  - Text (notes, mind maps)  → nearly free, just DB rows
+  - Images                   → medium, ~1-5MB per image
+  - Audio                    → heaviest, ~5MB per 5-min recording
+
+Recommended storage: Cloudflare R2
+  - First 10GB free
+  - Then $0.015/GB/month
+  - Free egress (unlike AWS S3)
+
+Monthly infra cost estimates:
+  0–500 users    →  $0–2/month    (within free tiers)
+  500–5,000      →  $5–30/month
+  5,000–50,000   →  $30–400/month
+
+Everything else (DB tables, Render hosting) — no additional cost.
+
+
+RECOMMENDED STARTING POINT
+----------------------------
+Build v1 sticky notes + v2 rich notes + image attach first.
+This covers 80% of student needs at very low cost.
+
+Audio recording and mind maps are phase 2 — add them once users
+ask for them and the core note-taking habit is established.
+
+Design the data model and navigation from day 1 to grow into all 4 layers,
+even if only v1 ships first.
+
+
+OPEN QUESTIONS (to decide before building)
+-------------------------------------------
+[ ] Personal notes only, or shareable to circles too?
+[ ] Where does "My Notes" live in sidebar navigation?
+[ ] What do we call it — "My Notes", "Study Space", "Notebook"?
+[ ] Do sticky notes on dashboard show for all users or only after first note created?

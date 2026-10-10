@@ -1,0 +1,1732 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: StudyCircle API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+  - name: me
+  - name: dashboard
+  - name: timer
+  - name: circles
+  - name: channels
+  - name: messages
+  - name: focus-rooms
+  - name: exams
+  - name: analytics
+  - name: leaderboard
+  - name: doubts
+  - name: pods
+  - name: resources
+  - name: revision
+  - name: calendar
+  - name: achievements
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/HealthStatus" }
+
+  /me:
+    get:
+      operationId: getMe
+      tags: [me]
+      summary: Get the current (demo) user
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Me" }
+
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Dashboard summary (today, week, streak, xp, level, goals progress)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DashboardSummary" }
+
+  /dashboard/activity:
+    get:
+      operationId: getRecentActivity
+      tags: [dashboard]
+      summary: Recent activity feed
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ActivityItem" }
+
+  /dashboard/today-goals:
+    get:
+      operationId: getTodayGoals
+      tags: [dashboard]
+      summary: Today's goals
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Goal" }
+    post:
+      operationId: createGoal
+      tags: [dashboard]
+      summary: Add a goal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateGoalInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Goal" }
+
+  /dashboard/today-goals/{id}/toggle:
+    post:
+      operationId: toggleGoal
+      tags: [dashboard]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Goal" }
+
+  /timer/sessions:
+    get:
+      operationId: listStudySessions
+      tags: [timer]
+      summary: List recent study sessions
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/StudySession" }
+    post:
+      operationId: createStudySession
+      tags: [timer]
+      summary: Log a finished study session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateStudySessionInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StudySession" }
+
+  /timer/subjects:
+    get:
+      operationId: listSubjects
+      tags: [timer]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Subject" }
+
+  /timer/weekly:
+    get:
+      operationId: getWeeklyStudyMinutes
+      tags: [timer]
+      summary: Weekly study minutes per day
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/DailyMinutes" }
+
+  /circles:
+    get:
+      operationId: listCircles
+      tags: [circles]
+      summary: List study circles
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Circle" }
+    post:
+      operationId: createCircle
+      tags: [circles]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateCircleInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Circle" }
+
+  /circles/discover:
+    get:
+      operationId: discoverCircles
+      tags: [circles]
+      summary: Discover trending public circles
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Circle" }
+
+  /circles/{id}:
+    get:
+      operationId: getCircle
+      tags: [circles]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CircleDetail" }
+
+  /circles/{id}/join:
+    post:
+      operationId: joinCircle
+      tags: [circles]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Circle" }
+
+  /circles/{id}/channels:
+    get:
+      operationId: listCircleChannels
+      tags: [channels]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Channel" }
+
+  /channels/{id}/messages:
+    get:
+      operationId: listChannelMessages
+      tags: [messages]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Message" }
+    post:
+      operationId: sendChannelMessage
+      tags: [messages]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SendMessageInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Message" }
+
+  /messages/{id}/react:
+    post:
+      operationId: reactToMessage
+      tags: [messages]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ReactInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Message" }
+
+  /focus-rooms:
+    get:
+      operationId: listFocusRooms
+      tags: [focus-rooms]
+      summary: List live focus rooms
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/FocusRoom" }
+    post:
+      operationId: createFocusRoom
+      tags: [focus-rooms]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateFocusRoomInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/FocusRoom" }
+
+  /focus-rooms/{id}:
+    get:
+      operationId: getFocusRoom
+      tags: [focus-rooms]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/FocusRoomDetail" }
+
+  /focus-rooms/{id}/join:
+    post:
+      operationId: joinFocusRoom
+      tags: [focus-rooms]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/JoinFocusRoomBody" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/FocusRoom" }
+
+  /exams:
+    get:
+      operationId: listExams
+      tags: [exams]
+      summary: List available exams
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Exam" }
+
+  /exams/{id}:
+    get:
+      operationId: getExam
+      tags: [exams]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ExamDetail" }
+
+  /exams/{id}/attempt:
+    post:
+      operationId: startExamAttempt
+      tags: [exams]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ExamAttempt" }
+
+  /attempts/{id}:
+    get:
+      operationId: getExamAttempt
+      tags: [exams]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ExamAttempt" }
+
+  /attempts/{id}/answer:
+    post:
+      operationId: submitAnswer
+      tags: [exams]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SubmitAnswerInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ExamAttempt" }
+
+  /attempts/{id}/submit:
+    post:
+      operationId: submitExamAttempt
+      tags: [exams]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ExamResult" }
+
+  /analytics/overview:
+    get:
+      operationId: getAnalyticsOverview
+      tags: [analytics]
+      summary: Overall analytics (accuracy, percentile, time)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AnalyticsOverview" }
+
+  /analytics/topic-performance:
+    get:
+      operationId: getTopicPerformance
+      tags: [analytics]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/TopicPerformance" }
+
+  /analytics/score-trend:
+    get:
+      operationId: getScoreTrend
+      tags: [analytics]
+      summary: Score trend across recent attempts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ScorePoint" }
+
+  /leaderboard:
+    get:
+      operationId: getLeaderboard
+      tags: [leaderboard]
+      summary: Leaderboard query
+      parameters:
+        - name: timeframe
+          in: query
+          required: true
+          schema: { type: string, enum: [daily, weekly, monthly] }
+        - name: type
+          in: query
+          required: true
+          schema: { type: string, enum: [global, circle, room] }
+        - name: filterId
+          in: query
+          required: false
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/LeaderboardEntry" }
+    post:
+      operationId: triggerLeaderboardReset
+      tags: [leaderboard]
+      summary: Reset weekly/monthly leaderboards
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+
+  /users/profile/customize:
+    post:
+      operationId: customizeProfile
+      tags: [me]
+      summary: Update PRO customization (Aura & Avatar)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CustomizeProfileInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Me" }
+
+  /messages/{id}:
+    put:
+      operationId: updateMessage
+      tags: [channels]
+      summary: Update a message
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SendMessageInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Message" }
+    delete:
+      operationId: deleteMessage
+      tags: [channels]
+      summary: Delete a message
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+
+  /doubts:
+    get:
+      operationId: listDoubts
+      tags: [doubts]
+      summary: List doubt bounties
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Doubt" }
+    post:
+      operationId: createDoubt
+      tags: [doubts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateDoubtInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Doubt" }
+
+  /doubts/{id}:
+    get:
+      operationId: getDoubt
+      tags: [doubts]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DoubtDetail" }
+
+  /doubts/{id}/answers:
+    post:
+      operationId: answerDoubt
+      tags: [doubts]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AnswerDoubtInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DoubtAnswer" }
+
+  /doubts/answers/{id}/upvote:
+    post:
+      operationId: upvoteAnswer
+      tags: [doubts]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DoubtAnswer" }
+
+  /pods:
+    get:
+      operationId: listPods
+      tags: [pods]
+      summary: List accountability pods
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Pod" }
+
+  /pods/{id}:
+    get:
+      operationId: getPod
+      tags: [pods]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PodDetail" }
+
+  /resources:
+    get:
+      operationId: listResources
+      tags: [resources]
+      summary: List resources from all circles
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Resource" }
+    post:
+      operationId: createResource
+      tags: [resources]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateResourceInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Resource" }
+
+  /revision/stats:
+    get:
+      operationId: getRevisionStats
+      tags: [revision]
+      summary: Get user revision stats like heatmap and streak
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RevisionStats" }
+
+  /revision/community-decks:
+    get:
+      operationId: listCommunityDecks
+      tags: [revision]
+      summary: Trending community decks
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/CommunityDeck" }
+
+  /revision/leaderboard:
+    get:
+      operationId: getRevisionLeaderboard
+      tags: [revision]
+      summary: Leaderboard of top reviewers today
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/LeaderboardUser" }
+
+  /revision/items:
+    get:
+      operationId: listRevisionItems
+      tags: [revision]
+      summary: Spaced-repetition items due today and upcoming
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/RevisionItem" }
+    post:
+      operationId: createRevisionItem
+      tags: [revision]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateRevisionItemInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RevisionItem" }
+
+  /revision/items/{id}/review:
+    post:
+      operationId: reviewRevisionItem
+      tags: [revision]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ReviewRevisionItemInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RevisionItem" }
+
+  /calendar/events:
+    get:
+      operationId: listCalendarEvents
+      tags: [calendar]
+      summary: Upcoming events
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/CalendarEvent" }
+    post:
+      operationId: createCalendarEvent
+      tags: [calendar]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateCalendarEventInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CalendarEvent" }
+
+  /achievements:
+    get:
+      operationId: listAchievements
+      tags: [achievements]
+      summary: Earned and locked badges
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Achievement" }
+
+  /sticky-notes:
+    get:
+      operationId: listStickyNotes
+      tags: [stickyNotes]
+      summary: List all sticky notes for the current user
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/StickyNote" }
+    post:
+      operationId: createStickyNote
+      tags: [stickyNotes]
+      summary: Create a sticky note
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateStickyNoteInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StickyNote" }
+
+  /sticky-notes/{id}/pin:
+    patch:
+      operationId: pinStickyNote
+      tags: [stickyNotes]
+      summary: Toggle pin on a sticky note
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StickyNote" }
+
+  /sticky-notes/{id}:
+    delete:
+      operationId: deleteStickyNote
+      tags: [stickyNotes]
+      summary: Delete a sticky note
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [success]
+                properties:
+                  success: { type: boolean }
+
+  /aim:
+    get:
+      operationId: getAim
+      tags: [aim]
+      summary: Get the current user's aim
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - { $ref: "#/components/schemas/UserAim" }
+                  - { type: "null" }
+    put:
+      operationId: upsertAim
+      tags: [aim]
+      summary: Create or update the user's aim
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UpsertAimInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/UserAim" }
+    delete:
+      operationId: deleteAim
+      tags: [aim]
+      summary: Delete the user's aim
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [success]
+                properties:
+                  success: { type: boolean }
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string }
+
+    Me:
+      type: object
+      required: [id, displayName, handle, avatarUrl, level, xp, xpForNextLevel, streakDays, examFocus, plan]
+      properties:
+        id: { type: string }
+        displayName: { type: string }
+        handle: { type: string }
+        avatarUrl: { type: string }
+        level: { type: integer }
+        xp: { type: integer }
+        xpForNextLevel: { type: integer }
+        streakDays: { type: integer }
+        examFocus: { type: string }
+        plan: { type: string, enum: [free, pro] }
+
+    DashboardSummary:
+      type: object
+      required:
+        [
+          todayMinutes,
+          weeklyMinutes,
+          streakDays,
+          level,
+          xp,
+          xpForNextLevel,
+          accuracy,
+          rankPercentile,
+          activeCircles,
+          dailyTargetMinutes,
+          upcomingExam,
+        ]
+      properties:
+        todayMinutes: { type: integer }
+        weeklyMinutes: { type: integer }
+        streakDays: { type: integer }
+        level: { type: integer }
+        xp: { type: integer }
+        xpForNextLevel: { type: integer }
+        accuracy: { type: number }
+        rankPercentile: { type: number }
+        activeCircles: { type: integer }
+        dailyTargetMinutes: { type: integer }
+        upcomingExam:
+          oneOf:
+            - { type: "null" }
+            - { $ref: "#/components/schemas/UpcomingExam" }
+
+    UpcomingExam:
+      type: object
+      required: [id, title, startsAt, daysAway]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        startsAt: { type: string, format: date-time }
+        daysAway: { type: integer }
+
+    ActivityItem:
+      type: object
+      required: [id, kind, title, subtitle, createdAt]
+      properties:
+        id: { type: string }
+        kind:
+          {
+            type: string,
+            enum:
+              [
+                study_session,
+                exam_completed,
+                badge_earned,
+                circle_joined,
+                doubt_answered,
+                pod_goal,
+              ],
+          }
+        title: { type: string }
+        subtitle: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    Goal:
+      type: object
+      required: [id, title, completed, xp]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        completed: { type: boolean }
+        xp: { type: integer }
+
+    CreateGoalInput:
+      type: object
+      required: [title]
+      properties:
+        title: { type: string }
+        xp: { type: integer }
+
+    Subject:
+      type: object
+      required: [id, name, color, totalMinutes]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        color: { type: string }
+        totalMinutes: { type: integer }
+
+    StudySession:
+      type: object
+      required: [id, subjectId, subjectName, subjectColor, mode, durationMinutes, note, startedAt]
+      properties:
+        id: { type: string }
+        subjectId: { type: string }
+        subjectName: { type: string }
+        subjectColor: { type: string }
+        mode: { type: string, enum: [pomodoro, stopwatch] }
+        durationMinutes: { type: integer }
+        note: { type: string }
+        startedAt: { type: string, format: date-time }
+
+    CreateStudySessionInput:
+      type: object
+      required: [subjectId, mode, durationMinutes]
+      properties:
+        subjectId: { type: string }
+        mode: { type: string, enum: [pomodoro, stopwatch] }
+        durationMinutes: { type: integer, minimum: 1 }
+        note: { type: string }
+
+    DailyMinutes:
+      type: object
+      required: [day, minutes]
+      properties:
+        day: { type: string }
+        minutes: { type: integer }
+
+    Circle:
+      type: object
+      required: [id, name, slug, description, exam, memberCount, isPrivate, coverColor, joined, onlineCount]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        slug: { type: string }
+        description: { type: string }
+        exam: { type: string }
+        memberCount: { type: integer }
+        isPrivate: { type: boolean }
+        coverColor: { type: string }
+        joined: { type: boolean }
+        onlineCount: { type: integer }
+
+    CreateCircleInput:
+      type: object
+      required: [name, description, exam, isPrivate]
+      properties:
+        name: { type: string }
+        description: { type: string }
+        exam: { type: string }
+        isPrivate: { type: boolean }
+
+    CircleDetail:
+      allOf:
+        - $ref: "#/components/schemas/Circle"
+        - type: object
+          required: [members, channels]
+          properties:
+            members:
+              type: array
+              items: { $ref: "#/components/schemas/CircleMember" }
+            channels:
+              type: array
+              items: { $ref: "#/components/schemas/Channel" }
+
+    CircleMember:
+      type: object
+      required: [userId, displayName, handle, avatarUrl, role, online, level]
+      properties:
+        userId: { type: string }
+        displayName: { type: string }
+        handle: { type: string }
+        avatarUrl: { type: string }
+        role: { type: string, enum: [owner, mod, member] }
+        online: { type: boolean }
+        level: { type: integer }
+
+    Channel:
+      type: object
+      required: [id, circleId, name, kind, description, unread]
+      properties:
+        id: { type: string }
+        circleId: { type: string }
+        name: { type: string }
+        kind: { type: string, enum: [general, doubts, resources, announcements, mock-tests, off-topic, voice] }
+        description: { type: string }
+        unread: { type: integer }
+
+    Message:
+      type: object
+      required: [id, channelId, authorId, authorName, authorAvatar, body, createdAt, reactions, pinned]
+      properties:
+        id: { type: string }
+        channelId: { type: string }
+        authorId: { type: string }
+        authorName: { type: string }
+        authorAvatar: { type: string }
+        replyToId: { type: string }
+        replyToAuthorName: { type: string }
+        replyToBody: { type: string }
+        body: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        pinned: { type: boolean }
+        reactions:
+          type: array
+          items: { $ref: "#/components/schemas/Reaction" }
+
+    Reaction:
+      type: object
+      required: [emoji, count, mine]
+      properties:
+        emoji: { type: string }
+        count: { type: integer }
+        mine: { type: boolean }
+
+    SendMessageInput:
+      type: object
+      required: [body]
+      properties:
+        body: { type: string, minLength: 1 }
+
+    ReactInput:
+      type: object
+      required: [emoji]
+      properties:
+        emoji: { type: string }
+
+    FocusRoom:
+      type: object
+      required: [id, name, description, hostName, hostAvatar, mode, participantCount, maxParticipants, isLive, silentMode, exam, focusMinutesElapsed, totalParticipantMinutes, accentColor]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string }
+        hostName: { type: string }
+        hostAvatar: { type: string }
+        mode: { type: string, enum: [silent, voice, video] }
+        participantCount: { type: integer }
+        maxParticipants: { type: integer }
+        isLive: { type: boolean }
+        silentMode: { type: boolean }
+        exam: { type: string }
+        focusMinutesElapsed: { type: integer }
+        totalParticipantMinutes: { type: integer }
+        accentColor: { type: string }
+        linkedCircleId: { type: string }
+        isChatEnabled: { type: boolean }
+        hostId: { type: string }
+
+    JoinFocusRoomBody:
+      type: object
+      required: [displayName, avatarUrl]
+      properties:
+        displayName: { type: string }
+        avatarUrl: { type: string }
+        userId:
+          type: string
+          deprecated: true
+          description: Ignored; server uses the authenticated user id.
+
+    CreateFocusRoomInput:
+      type: object
+      required: [name, description, mode, maxParticipants, exam, hostId, hostName, hostAvatar]
+      properties:
+        name: { type: string }
+        description: { type: string }
+        mode: { type: string, enum: [silent, voice, video] }
+        maxParticipants: { type: integer }
+        exam: { type: string }
+        isPrivate: { type: boolean }
+        hostId: { type: string }
+        hostName: { type: string }
+        hostAvatar: { type: string }
+
+    FocusRoomDetail:
+      allOf:
+        - $ref: "#/components/schemas/FocusRoom"
+        - type: object
+          required: [participants, sharedTimer]
+          properties:
+            participants:
+              type: array
+              items: { $ref: "#/components/schemas/FocusParticipant" }
+            sharedTimer: { $ref: "#/components/schemas/SharedTimer" }
+
+    FocusParticipant:
+      type: object
+      required: [userId, displayName, avatarUrl, micOn, cameraOn, status, focusMinutes, totalStudySeconds, role]
+      properties:
+        userId: { type: string }
+        displayName: { type: string }
+        avatarUrl: { type: string }
+        micOn: { type: boolean }
+        cameraOn: { type: boolean }
+        status: { type: string, enum: [focusing, break, idle, studying] }
+        focusMinutes: { type: integer }
+        totalStudySeconds: { type: integer }
+        role: { type: string, enum: [owner, mod, member] }
+        currentTask: { type: string }
+        isTaskPrivate: { type: boolean }
+
+    SharedTimer:
+      type: object
+      required: [mode, totalSeconds, remainingSeconds, label]
+      properties:
+        mode: { type: string, enum: [pomodoro, break, stopwatch] }
+        totalSeconds: { type: integer }
+        remainingSeconds: { type: integer }
+        label: { type: string }
+
+    Exam:
+      type: object
+      required: [id, title, exam, kind, durationMinutes, totalQuestions, totalMarks, attemptCount, difficulty, isLive, scheduledAt]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        exam: { type: string }
+        kind: { type: string, enum: [practice, timed, full-mock, scheduled, contest, pyq] }
+        durationMinutes: { type: integer }
+        totalQuestions: { type: integer }
+        totalMarks: { type: integer }
+        attemptCount: { type: integer }
+        difficulty: { type: string, enum: [easy, medium, hard] }
+        isLive: { type: boolean }
+        scheduledAt:
+          oneOf:
+            - { type: "null" }
+            - { type: string, format: date-time }
+
+    ExamDetail:
+      allOf:
+        - $ref: "#/components/schemas/Exam"
+        - type: object
+          required: [description, instructions, topics, negativeMarking, marksPerQuestion]
+          properties:
+            description: { type: string }
+            instructions:
+              type: array
+              items: { type: string }
+            topics:
+              type: array
+              items: { type: string }
+            negativeMarking: { type: number }
+            marksPerQuestion: { type: number }
+
+    Question:
+      type: object
+      required: [id, kind, body, options, marks, negativeMarks, topic]
+      properties:
+        id: { type: string }
+        kind: { type: string, enum: [mcq, msq, nat] }
+        body: { type: string }
+        options:
+          type: array
+          items: { $ref: "#/components/schemas/QuestionOption" }
+        marks: { type: number }
+        negativeMarks: { type: number }
+        topic: { type: string }
+
+    QuestionOption:
+      type: object
+      required: [id, body]
+      properties:
+        id: { type: string }
+        body: { type: string }
+
+    UserAnswer:
+      type: object
+      required: [questionId, selectedOptionIds, status]
+      properties:
+        questionId: { type: string }
+        selectedOptionIds:
+          type: array
+          items: { type: string }
+        natValue:
+          oneOf:
+            - { type: "null" }
+            - { type: number }
+        status: { type: string, enum: [unanswered, answered, marked, answered-marked] }
+        timeSpentSeconds: { type: integer }
+
+    ExamAttempt:
+      type: object
+      required: [id, examId, examTitle, status, durationMinutes, startedAt, secondsRemaining, questions, answers, totalMarks, marksPerQuestion, negativeMarking]
+      properties:
+        id: { type: string }
+        examId: { type: string }
+        examTitle: { type: string }
+        status: { type: string, enum: [in-progress, submitted] }
+        durationMinutes: { type: integer }
+        startedAt: { type: string, format: date-time }
+        secondsRemaining: { type: integer }
+        totalMarks: { type: integer }
+        marksPerQuestion: { type: number }
+        negativeMarking: { type: number }
+        questions:
+          type: array
+          items: { $ref: "#/components/schemas/Question" }
+        answers:
+          type: array
+          items: { $ref: "#/components/schemas/UserAnswer" }
+
+    SubmitAnswerInput:
+      type: object
+      required: [questionId, status]
+      properties:
+        questionId: { type: string }
+        selectedOptionIds:
+          type: array
+          items: { type: string }
+        natValue:
+          oneOf:
+            - { type: "null" }
+            - { type: number }
+        status: { type: string, enum: [unanswered, answered, marked, answered-marked] }
+        timeSpentSeconds: { type: integer }
+
+    ExamResult:
+      type: object
+      required: [attemptId, examTitle, score, totalMarks, accuracy, percentile, rank, totalParticipants, correctCount, wrongCount, skippedCount, timeSpentMinutes, topicBreakdown]
+      properties:
+        attemptId: { type: string }
+        examTitle: { type: string }
+        score: { type: number }
+        totalMarks: { type: integer }
+        accuracy: { type: number }
+        percentile: { type: number }
+        rank: { type: integer }
+        totalParticipants: { type: integer }
+        correctCount: { type: integer }
+        wrongCount: { type: integer }
+        skippedCount: { type: integer }
+        timeSpentMinutes: { type: integer }
+        topicBreakdown:
+          type: array
+          items: { $ref: "#/components/schemas/TopicBreakdownEntry" }
+
+    TopicBreakdownEntry:
+      type: object
+      required: [topic, correct, total]
+      properties:
+        topic: { type: string }
+        correct: { type: integer }
+        total: { type: integer }
+
+    AnalyticsOverview:
+      type: object
+      required: [accuracy, percentile, rank, totalAttempts, averageScore, totalStudyMinutes, strongTopics, weakTopics]
+      properties:
+        accuracy: { type: number }
+        percentile: { type: number }
+        rank: { type: integer }
+        totalAttempts: { type: integer }
+        averageScore: { type: number }
+        totalStudyMinutes: { type: integer }
+        strongTopics:
+          type: array
+          items: { type: string }
+        weakTopics:
+          type: array
+          items: { type: string }
+
+    TopicPerformance:
+      type: object
+      required: [topic, accuracy, attempts, avgTimeSeconds]
+      properties:
+        topic: { type: string }
+        accuracy: { type: number }
+        attempts: { type: integer }
+        avgTimeSeconds: { type: integer }
+
+    ScorePoint:
+      type: object
+      required: [label, score, percentile]
+      properties:
+        label: { type: string }
+        score: { type: number }
+        percentile: { type: number }
+
+    LeaderboardEntry:
+      type: object
+      required: [rank, userId, displayName, handle, avatarUrl, xp, studyMinutes, streakDays, badge, isYou]
+      properties:
+        rank: { type: integer }
+        userId: { type: string }
+        displayName: { type: string }
+        handle: { type: string }
+        avatarUrl: { type: string }
+        xp: { type: integer }
+        studyMinutes: { type: integer }
+        streakDays: { type: integer }
+        badge: { type: string }
+        isYou: { type: boolean }
+
+    Doubt:
+      type: object
+      required: [id, title, body, askedBy, askedByAvatar, topic, exam, bountyXp, answerCount, createdAt, resolved]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        body: { type: string }
+        askedBy: { type: string }
+        askedByAvatar: { type: string }
+        topic: { type: string }
+        exam: { type: string }
+        bountyXp: { type: integer }
+        answerCount: { type: integer }
+        createdAt: { type: string, format: date-time }
+        resolved: { type: boolean }
+
+    CreateDoubtInput:
+      type: object
+      required: [title, body, topic, exam, bountyXp]
+      properties:
+        title: { type: string }
+        body: { type: string }
+        topic: { type: string }
+        exam: { type: string }
+        bountyXp: { type: integer, minimum: 5, maximum: 500 }
+
+    DoubtDetail:
+      allOf:
+        - $ref: "#/components/schemas/Doubt"
+        - type: object
+          required: [answers]
+          properties:
+            answers:
+              type: array
+              items: { $ref: "#/components/schemas/DoubtAnswer" }
+
+    DoubtAnswer:
+      type: object
+      required: [id, doubtId, body, authorName, authorAvatar, upvotes, accepted, createdAt, mineUpvoted]
+      properties:
+        id: { type: string }
+        doubtId: { type: string }
+        body: { type: string }
+        authorName: { type: string }
+        authorAvatar: { type: string }
+        upvotes: { type: integer }
+        accepted: { type: boolean }
+        createdAt: { type: string, format: date-time }
+        mineUpvoted: { type: boolean }
+
+    AnswerDoubtInput:
+      type: object
+      required: [body]
+      properties:
+        body: { type: string, minLength: 5 }
+
+    Pod:
+      type: object
+      required: [id, name, exam, memberCount, sharedStreak, weeklyXp, dailyGoalMinutes]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        exam: { type: string }
+        memberCount: { type: integer }
+        sharedStreak: { type: integer }
+        weeklyXp: { type: integer }
+        dailyGoalMinutes: { type: integer }
+
+    PodDetail:
+      allOf:
+        - $ref: "#/components/schemas/Pod"
+        - type: object
+          required: [members, weeklyReview]
+          properties:
+            members:
+              type: array
+              items: { $ref: "#/components/schemas/PodMember" }
+            weeklyReview: { $ref: "#/components/schemas/PodWeeklyReview" }
+
+    PodMember:
+      type: object
+      required: [userId, displayName, avatarUrl, todayMinutes, weeklyMinutes, streakDays, dailyGoalMet]
+      properties:
+        userId: { type: string }
+        displayName: { type: string }
+        avatarUrl: { type: string }
+        todayMinutes: { type: integer }
+        weeklyMinutes: { type: integer }
+        streakDays: { type: integer }
+        dailyGoalMet: { type: boolean }
+
+    PodWeeklyReview:
+      type: object
+      required: [totalMinutes, totalXp, mvpUserId, theme]
+      properties:
+        totalMinutes: { type: integer }
+        totalXp: { type: integer }
+        mvpUserId: { type: string }
+        theme: { type: string }
+
+    Resource:
+      type: object
+      required: [id, title, kind, circleName, addedBy, sizeKb, downloads, createdAt, tag]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        kind: { type: string, enum: [pdf, notes, link, video, pyq] }
+        circleName: { type: string }
+        addedBy: { type: string }
+        sizeKb: { type: integer }
+        downloads: { type: integer }
+        createdAt: { type: string, format: date-time }
+        tag: { type: string }
+
+    CreateResourceInput:
+      type: object
+      required: [title, kind, tag]
+      properties:
+        title: { type: string }
+        kind: { type: string, enum: [pdf, notes, link, video, pyq] }
+        tag: { type: string }
+
+    RevisionItem:
+      type: object
+      required: [id, topic, subject, lastReviewedAt, dueAt, intervalDays, easeFactor, masteryPct, dueLabel]
+      properties:
+        id: { type: string }
+        topic: { type: string }
+        subject: { type: string }
+        lastReviewedAt: { type: string, format: date-time }
+        dueAt: { type: string, format: date-time }
+        intervalDays: { type: integer }
+        easeFactor: { type: number }
+        masteryPct: { type: integer }
+        dueLabel: { type: string }
+
+    RevisionStats:
+      type: object
+      required: [heatmap, currentStreak, overallRetention]
+      properties:
+        heatmap:
+          type: array
+          items: { type: integer }
+        currentStreak: { type: integer }
+        overallRetention: { type: integer }
+
+    CommunityDeck:
+      type: object
+      required: [id, title, author, saves]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        author: { type: string }
+        saves: { type: integer }
+
+    LeaderboardUser:
+      type: object
+      required: [id, name, score, rank]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        score: { type: integer }
+        rank: { type: integer }
+
+    LeaderboardEntry:
+      type: object
+      required: [userId, displayName, avatarUrl, totalMinutes, rank]
+      properties:
+        userId: { type: string }
+        displayName: { type: string }
+        avatarUrl: { type: string }
+        totalMinutes: { type: integer }
+        rank: { type: integer }
+        activeAuraId: { type: string }
+        activeAvatarId: { type: string }
+        monthlyRankTitle: { type: string }
+        weeklyRankTitle: { type: string }
+        examFocus: { type: string }
+        level: { type: integer }
+
+    CustomizeProfileInput:
+      type: object
+      properties:
+        activeAuraId: { type: string }
+        activeAvatarId: { type: string }
+
+    CreateRevisionItemInput:
+      type: object
+      required: [topic, subject]
+      properties:
+        topic: { type: string }
+        subject: { type: string }
+
+    ReviewRevisionItemInput:
+      type: object
+      required: [quality]
+      properties:
+        quality: { type: string, enum: [again, hard, good, easy] }
+
+    CalendarEvent:
+      type: object
+      required: [id, title, kind, startsAt, endsAt, circleName, color]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        kind: { type: string, enum: [mock-test, group-study, mentor-class, revision, deadline] }
+        startsAt: { type: string, format: date-time }
+        endsAt: { type: string, format: date-time }
+        circleName: { type: string }
+        color: { type: string }
+
+    CreateCalendarEventInput:
+      type: object
+      required: [title, kind, startsAt, endsAt]
+      properties:
+        title: { type: string }
+        kind: { type: string, enum: [mock-test, group-study, mentor-class, revision, deadline] }
+        startsAt: { type: string, format: date-time }
+        endsAt: { type: string, format: date-time }
+        circleName: { type: string }
+
+    Achievement:
+      type: object
+      required: [id, name, description, icon, earnedAt, locked, progress, target]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string }
+        icon: { type: string }
+        earnedAt:
+          oneOf:
+            - { type: "null" }
+            - { type: string, format: date-time }
+        locked: { type: boolean }
+        progress: { type: integer }
+        target: { type: integer }
+
+    StickyNote:
+      type: object
+      required: [id, userId, content, color, pinned, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        userId: { type: string }
+        content: { type: string }
+        color: { type: string }
+        pinned: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    CreateStickyNoteInput:
+      type: object
+      required: [content]
+      properties:
+        content: { type: string }
+        color: { type: string }
+
+    UserAim:
+      type: object
+      required: [userId, examName, examDate, updatedAt]
+      properties:
+        userId: { type: string }
+        examName: { type: string }
+        examDate: { type: string }
+        targetScore: { type: string, nullable: true }
+        personalNote: { type: string, nullable: true }
+        updatedAt: { type: string, format: date-time }
+
+    UpsertAimInput:
+      type: object
+      required: [examName, examDate]
+      properties:
+        examName: { type: string }
+        examDate: { type: string }
+        targetScore: { type: string, nullable: true }
+        personalNote: { type: string, nullable: true }

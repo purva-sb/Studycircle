@@ -1,0 +1,395 @@
+═══════════════════════════════════════════════════════════════════════════════
+  StudyCircle / CircleTest — Future Mock-Test Features Plan
+═══════════════════════════════════════════════════════════════════════════════
+  Last updated: 2026-05-31
+
+
+═══════════════════════════════════════════════════════════════════════════════
+PART 1 — RICHER QUESTION METADATA (subject / subtopic / source)
+═══════════════════════════════════════════════════════════════════════════════
+
+Right now questions have a single `topic` field (free text). To enable real
+weakness analysis ("you're 80% in Calculus but 35% in Probability — drill
+into Probability → Conditional probability → 20%"), we need a richer tag set.
+
+─── Fields to add to questionsTable ─────────────────────────────────────────
+  - subject     (e.g. Mathematics / Physics / Computer Science)
+  - subtopic    (e.g. Integration by parts / Friction / Binary trees)
+  - source      (e.g. "GATE 2024", "NCERT Ch 5", "PYQ", "Custom")
+  - difficulty  (already exists at exam level — could add per-question too)
+
+─── Schema approach ─────────────────────────────────────────────────────────
+RECOMMENDED: Free-text columns with autocomplete from existing values in
+the same exam. Don't over-engineer a taxonomy table upfront — wait until
+real institutes use it, then normalize.
+
+Pros: ship fast, zero setup friction.
+Cons: typos fragment data ("Calculus" vs "calc"). Mitigate with
+case-insensitive matching on the analytics side.
+
+─── Manual vs AI tagging ────────────────────────────────────────────────────
+BUILD BOTH:
+  - Manual: admin fills the 3 fields, or includes them in CSV
+  - AI-assisted: "Suggest tags" button in admin form
+       → sends question body to Claude Haiku
+       → returns {subject, topic, subtopic, difficulty}
+       → admin reviews & accepts
+       Cost: ~$0.001 per question. Massive time saver for CSV imports
+       where teacher left subtopic empty.
+
+─── CSV format extension ────────────────────────────────────────────────────
+Add backward-compatible columns:
+  kind, body, optA, optB, optC, optD, correct, marks, negMarks,
+  section, topic, subject, subtopic, source, explanation
+
+
+═══════════════════════════════════════════════════════════════════════════════
+PART 2 — ANALYTICS THAT ATTRACT + HELP STUDENTS
+═══════════════════════════════════════════════════════════════════════════════
+
+────────────────────────────────────────────────────────────────────────────────
+🪝 ENGAGEMENT — what brings them in & keeps them coming back
+────────────────────────────────────────────────────────────────────────────────
+
+  Daily streak
+    "🔥 5-day streak — don't break it!" on dashboard.
+    Doubles retention in most ed-tech studies. Small effort.
+
+  Shareable WhatsApp result card
+    After exam, generate a pretty image with score + rank → wa.me share.
+    Viral loop — biggest free acquisition channel for Indian ed-tech.
+    Small effort.
+
+  All-India Rank predictor
+    "Based on your last 5 mocks, you'd rank #3,450 in actual GATE 2026."
+    Single biggest reason students stay. Medium effort.
+
+  Activity heatmap
+    GitHub-style "questions solved per day" calendar.
+    Small effort.
+
+  Weekly cohort stats
+    "1,247 students attempted this exam this week, you beat 73%."
+    Small effort.
+
+  Achievement badges
+    10 mocks done, 100% in a section, 30-day streak.
+    Each unlock = dopamine hit. Medium effort.
+
+────────────────────────────────────────────────────────────────────────────────
+🎯 INSIGHTS — actual learning value
+────────────────────────────────────────────────────────────────────────────────
+
+  Subject / Topic / Subtopic strength radar
+    Drill-down: Subject → Topic → Subtopic with red/yellow/green bars.
+    Needs: subject/subtopic tags (Part 1).
+
+  Time-per-question analysis
+    "Avg 3 min on Calculus, but top scorers do it in 1:30."
+    Needs: per-question timing (track when student lands on question).
+
+  Mistake patterns (AI classification)
+    "70% of your wrongs are silly mistakes (you knew the concept)"
+    vs  "you don't understand topic X".
+    Needs: subtopic tags + Claude classification, plus 50+ attempts per
+           user to calibrate.
+
+  Weak subtopic flag
+    List of subtopics with <40% accuracy AND most frequent in PYQ.
+    Needs: subtopic tags + PYQ source data.
+
+  Improvement velocity
+    "Your score is up 8 marks over the last month."
+    Needs: trend analysis (already have score history).
+
+  Concept-gap detector
+    "You consistently fail questions on Thermodynamics 2nd law."
+    Needs: subtopic tags.
+
+────────────────────────────────────────────────────────────────────────────────
+🔮 PREDICTIVE — gives confidence / drives FOMO
+────────────────────────────────────────────────────────────────────────────────
+
+  Cutoff probability
+    "78% likely to clear GATE CSE cutoff (Gen)."
+    Emotionally massive. Needs real cutoff dataset + historical results.
+
+  Days-to-ready estimate
+    "At your current pace, you'll be exam-ready in 42 days."
+    Needs: improvement velocity model.
+
+  Best topic to study next
+    AI picks based on weakness × frequency-in-past-papers.
+    Needs: subtopic tags + PYQ source data + Claude.
+
+  Score trajectory
+    "If you keep improving at this rate → 78 marks by exam day."
+    Needs: regression line on score trend.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+PART 3 — VIDEO / ARTICLE SOLUTIONS PER QUESTION
+═══════════════════════════════════════════════════════════════════════════════
+
+Each question can have optional solution material:
+  • solutionVideoUrl   (https://, YouTube only — youtube.com / youtu.be)
+  • solutionArticleUrl (https:// any domain)
+
+YouTube-only for video is a security choice: prevents teachers from
+pasting redirect URLs or untrusted hosts. Article URL stays open because
+teachers link to their own blogs.
+
+Where they appear:
+  • Results page Question Review card (after exam submit) — two buttons:
+      📹 Watch Video Solution    📄 Read Article Solution
+  • Both open in new tab with rel="noopener noreferrer" (no tab-jacking)
+  • Only rendered when URL exists
+
+Admin entry:
+  • Two new fields in question form (next to Explanation)
+  • Two new CSV columns: solutionVideoUrl, solutionArticleUrl
+    (backward-compatible — older CSVs still parse)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+PART 4 — COMMUNITY Q&A LINKING (GATEOverflow-style growth loop)
+═══════════════════════════════════════════════════════════════════════════════
+
+The doubts feature already exists in the codebase (doubtsTable +
+DoubtsFeed page). We wire it to mock-test questions so students who get
+a question wrong can ask the community, and future students discover the
+answer via search.
+
+────────────────────────────────────────
+LAYER 1 — Manual linking (~1 hour)
+────────────────────────────────────────
+  • Add questionId (nullable FK) to doubtsTable
+  • Question Review card after exam shows:
+      💬 Discuss in Community  — opens doubt-create form with question
+                                  body pre-filled
+      💬 3 discussions          — if doubts already linked, shows count
+  • Doubt detail page shows the linked exam question at top for context
+
+────────────────────────────────────────
+LAYER 2 — Auto-recommendations (~2 hours)
+────────────────────────────────────────
+  Needs subject/subtopic tags (Part 1) to be useful.
+
+  When viewing a question's solution, query doubts where:
+    - questionId matches (direct link), OR
+    - topic / subtopic / subject match
+  Rank by upvotes + recency. Show top 3 as "Related Discussions".
+
+  Same logic on the doubt detail page itself: show 3 other related doubts.
+
+────────────────────────────────────────
+LAYER 3 — SEO play (~1.5 hours, only after ~100 doubts exist)
+────────────────────────────────────────
+  • Make doubt URLs public + indexable: /doubts/:id
+  • OpenGraph + Twitter card meta tags (title + first 200 chars of body)
+  • sitemap.xml listing all public doubts
+  • Result: Google indexes thousands of discussed GATE questions →
+    organic discovery → free traffic
+
+The compounding effect:
+    Student takes mock → gets Q wrong → reads explanation
+      → still confused → clicks "Discuss"
+      → community answers → answer helps next 100 students
+      → Google indexes the thread → 1000 more students discover the site
+      → some sign up → take mocks → cycle repeats
+
+This is Stack Overflow's growth loop applied to exam prep.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+PART 4.5 — AI FEATURES (mock-test scope only)
+═══════════════════════════════════════════════════════════════════════════════
+
+────────────────────────────────────────
+STUDENT-SIDE (during / after mock test)
+────────────────────────────────────────
+
+  "Explain this question"           Haiku    🔥 huge
+    After exam, on any wrong question. One button → Claude generates
+    step-by-step solution. Used when admin didn't write an explanation,
+    or as supplement when they did.
+
+  AI Doubt Solver                   Sonnet   🔥 huge
+    After exam, on any question card. "I still don't get it" opens a
+    chat thread with Claude about that specific question. Conversation
+    scoped to the question + correct answer + student's wrong answer.
+
+  AI weakness narrative             Sonnet   high
+    On results page. Plain-English paragraph:
+      "You're strong in Calculus (85%) but Probability is dragging you
+       down (35%). Focus next 2 weeks on conditional probability."
+    Generated from result.topicBreakdown + score data.
+
+  "Practice similar"                Haiku    medium
+    On a wrong-question card. Generates 5 similar questions on the
+    same subtopic for a mini-mock. Auto-creates a new attempt.
+
+  Next mock recommendation          Haiku    medium
+    After exam ends. "Based on this result, take Mock #4 next — it
+    focuses on your weak topics." Ranks existing mocks by overlap
+    with weakness topics.
+
+────────────────────────────────────────
+ADMIN-SIDE (creating mock tests)
+────────────────────────────────────────
+
+  Auto-tag                          Haiku    🔥 huge
+    Question form. "Suggest tags" button fills subject/topic/subtopic/
+    difficulty from the question body. Single biggest admin time-saver.
+    Unlocks the entire analytics layer.
+
+  Generate explanation              Haiku    🔥 huge
+    Question form. Admin enters Q + correct answer → AI drafts the
+    explanation. Admin reviews and edits before save.
+
+  Generate distractors              Haiku    high
+    Question form (MCQ/MSQ only). Admin enters Q + correct option →
+    AI generates 3 wrong-but-plausible options.
+
+  Generate questions                Sonnet   high
+    New "Generate Questions" button per exam. Admin types prompt:
+      "10 hard NAT questions on Probability, GATE CSE syllabus"
+    → 10 draft questions added to the exam for review.
+
+  Difficulty estimator              Haiku    medium
+    Question form. Predicts easy / medium / hard from the body alone.
+
+  CSV auto-fill                     Haiku    huge
+    CSV import preview. Detects rows with missing tags or explanations,
+    fills them before insert. Massive for institutes uploading old
+    paper banks where metadata is sparse.
+
+  OCR past papers                   Vision   huge for B2B
+    New upload flow. Scan printed GATE/JEE PDF or image → extract
+    questions to a draft exam. Differentiator vs WhatsApp + paper.
+
+  Duplicate detector                Haiku    medium
+    On question add. Flags if a near-duplicate already exists in this
+    exam (or another exam by the same teacher).
+
+────────────────────────────────────────
+BUSINESS / COST MODEL
+────────────────────────────────────────
+
+  Pricing approach:
+    • Free tier: 10 AI-doubt-solver calls per day, basic auto-tagging
+    • Student Pro (~₹99/mo): unlimited AI, chat tutor, study plans
+    • Institute tier: AI question gen + OCR + bulk auto-tagging
+      (this is what makes institutes pay vs WhatsApp + paper)
+
+  Anthropic API cost estimate at ~10K students:
+    • Heavy AI users: ~₹15/month each
+    • Pro tier ₹99/mo → ~80% margin
+
+  Recommended FIRST 3 AI features to ship:
+    1. Auto-tag (admin)         — saves hours, unlocks analytics
+    2. Generate explanation     — solves "no explanation" problem
+    3. AI weakness narrative    — post-exam "why this matters"
+
+  Together = product feels like an intelligent tutor.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+PART 5 — PHASED BUILD PLAN (combined)
+═══════════════════════════════════════════════════════════════════════════════
+
+──────────────────────────────────────────
+PHASE 1 — Foundation (DONE)
+──────────────────────────────────────────
+  1.  ✅ Video + article solution URLs per question (Part 3)
+  2.  ✅ Add subject / subtopic / source columns to questionsTable
+  3.  ✅ Admin form: 4 new fields with autocomplete from existing values
+  4.  ✅ Extend CSV format (backward-compatible)
+  5.  ✅ "Suggest tags" AI button (Claude Haiku, opt-in via env var,
+        rate-limited + cached for cost safety)
+  6.  ✅ Doubt ↔ question manual linking (Part 4, Layer 1)
+  7.  ✅ Results page: subject → topic → subtopic drill-down
+  8.  ✅ Score trend line chart on Analytics page (already existed)
+  9.  ✅ Daily streak on dashboard (already existed via usersTable.streakDays)
+  10. ✅ Shareable WhatsApp result card after exam (enhanced with
+        Twitter/X + clipboard + viral "beat my score" challenge link)
+
+──────────────────────────────────────────
+PHASE 2 — Engagement + community compounds
+──────────────────────────────────────────
+  11. Auto-recommended doubts on question solution (Part 4, Layer 2)
+  12. Activity heatmap on dashboard
+  13. Weakest subtopics widget ("Practice these next")
+  14. All-India rank predictor card
+  15. Achievement badges
+  16. Weekly cohort stats
+
+──────────────────────────────────────────
+PHASE 3 — Advanced (needs months of data)
+──────────────────────────────────────────
+  17. AI mistake classification (silly vs conceptual)
+  18. Cutoff probability model
+  19. Personalized study path (auto-pick next mocks)
+  20. Per-question timing analysis
+  21. Time-efficiency vs peer scoreboard
+  22. SEO: public doubt URLs + sitemap (Part 4, Layer 3)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+PART 4 — SKIP FOR NOW (premature)
+═══════════════════════════════════════════════════════════════════════════════
+
+  • AI mistake classification — needs 50+ attempts per user to calibrate
+  • Cutoff probability — need real GATE/JEE cutoff dataset + historical data
+  • Personalized study path — needs Phase 1+2 data accumulation first
+  • Hindi language support — not validated as a need yet
+  • React Native app — web-first until product-market fit
+  • Razorpay / payments — only after one real institute commits
+  • Two-separate-backends split — current modular monolith is fine
+
+
+═══════════════════════════════════════════════════════════════════════════════
+PART 5 — OPEN SECURITY ITEMS (deferred from earlier audit)
+═══════════════════════════════════════════════════════════════════════════════
+
+These are known limitations from the security audit. Server-side locking
+of sectional progress is the biggest one — sectional timer is currently
+client-side only, a determined student with DevTools can answer any
+question in any section within the overall time window.
+
+  • Server-side sectional locking
+      Backend needs to track currentSectionIdx per attempt and reject
+      answers to questions outside the unlocked section. Requires:
+      - DB column on examAttemptsTable: currentSectionIdx
+      - Endpoint: POST /attempts/:id/advance-section
+      - Reject /answer if question.sectionId is in locked sections
+
+  • Race condition on attemptCount increment
+      `attemptCount: e.attemptCount + 1` is read-then-write.
+      Fix: use sql`${examsTable.attemptCount} + 1` for atomic increment.
+
+  • Section delete during active attempts
+      Block section deletion if any in-progress attempt exists.
+
+  • Leaderboard opt-out
+      Currently always shows displayName + avatar of all participants.
+      Add a per-user privacy setting if needed later.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+PART 6 — NORTH STAR (why this matters)
+═══════════════════════════════════════════════════════════════════════════════
+
+CircleTest is B2B + B2C: institutes pay for the authoring/distribution
+pipeline, students use it free and drive viral/gamified growth.
+
+The analytics features above are what separate CircleTest from being
+"just another exam platform" — they are the reason a student tells their
+friend "use CircleTest" instead of "use Testbook".
+
+The order matters:
+  1. Tags first → makes everything else possible
+  2. Insights second → makes the tool feel intelligent
+  3. Predictions third → makes the tool feel essential
+
+Each phase compounds on the previous. Don't skip Phase 1 to chase Phase 3.

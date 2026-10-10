@@ -1,0 +1,26 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "S9ETpVHYKYB7ioO4i4Am3"
+uri = "file://artifacts/studycircle/src/assets/hero-bg.png"
+type = "image"
+title = "Study cosmos abstract hero"
+
+[[generated]]
+id = "tev6O5n0p83GOaF5I5Dhk"
+uri = "file://artifacts/studycircle/src/assets/avatar-1.png"
+type = "image"
+title = "Student avatar 1"
+
+[[generated]]
+id = "3KoWa1-xj5-CEHHbMSPdA"
+uri = "file://artifacts/studycircle/src/assets/avatar-2.png"
+type = "image"
+title = "Student avatar 2"
+
+[[generated]]
+id = "IplP3tF8YyUZhoI0R4ifn"
+uri = "file://artifacts/studycircle/src/assets/avatar-3.png"
+type = "image"
+title = "Student avatar 3"

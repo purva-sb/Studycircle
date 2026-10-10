@@ -1,0 +1,113 @@
+PDF Question Importer — Plan & Levels
+======================================
+
+OVERVIEW
+--------
+Upload a questions PDF (scanned or typed) → AI parses it into structured questions →
+admin reviews → questions land in the existing question bank via the CSV importer pipeline.
+
+All three levels share the same AI cost: ~$0.005–0.015 per page (Claude vision).
+A 20-page exam paper = $0.10–0.30. A 50-question paper = under $1.
+
+
+LEVEL 1 — Simple text extraction (cheapest, fastest to build)
+--------------------------------------------------------------
+How it works:
+  - Extract raw text from PDF with pdf-parse or pdfjs-dist
+  - Send text chunks to Claude with a structured prompt
+  - AI outputs MCQ/NAT questions in JSON → mapped to existing CSV format
+  - Admin pastes/imports directly
+
+Pros:
+  - Easiest to build (~half a day)
+  - Zero image processing overhead
+  - Cheapest AI cost (~$0.002–0.005 per question)
+
+Cons:
+  - Breaks on scanned PDFs (images, no embedded text)
+  - Misses diagrams, graphs, chemical structures, circuit diagrams
+  - Fails on Hindi/regional language papers with non-standard encoding
+
+Cost: ~$0.002–0.005/question. 100-question PDF < $0.50.
+
+
+LEVEL 2 — Vision-based extraction (current implementation target)
+-----------------------------------------------------------------
+How it works:
+  - Convert PDF pages to images using pdf2pic + sharp
+  - Send page images to Claude vision API
+  - AI reads questions visually — handles diagrams, formulas, scanned text
+  - Returns structured JSON (question body, options, correct answer, kind)
+  - Admin sees extracted rows in a preview table → edits if needed → imports
+
+Pros:
+  - Handles scanned PDFs, diagrams, formulas, regional languages
+  - One-session workflow: upload → preview → import
+  - No extra DB tables needed
+  - Reuses existing CSV importer pipeline
+
+Cons:
+  - No persistent queue — if you close the tab, extraction is lost
+  - Whole PDF must be re-uploaded if AI misses a few questions
+  - No multi-admin collaboration on review
+  - No audit trail of what was changed vs what AI originally output
+
+Cost: ~$0.005–0.015/page. 20-page paper = $0.10–0.30.
+Dev time: ~1 day.
+
+STATUS: IN PROGRESS
+
+
+LEVEL 3 — Async queue with per-question review UI (future upgrade)
+-------------------------------------------------------------------
+How it works:
+  - Same AI extraction as Level 2
+  - Extracted questions saved to a `pending_questions` DB table (status: pending/approved/rejected)
+  - Admin can upload and come back later
+  - Review UI shows each extracted question side-by-side with the original PDF page image
+  - Admin approves / edits / rejects per question
+  - Rejected questions can be re-prompted individually
+  - Approved questions auto-import to the question bank
+
+Pros:
+  - Async — upload and review later, no need to stay on the page
+  - Multi-admin: different people can upload and review
+  - Per-question rejection + re-prompt (no need to re-run whole PDF)
+  - Full audit trail: original AI output, who approved, what was edited
+  - Scales to large papers (100+ questions)
+
+Cons:
+  - 3–4 days dev work
+  - Requires a new `pending_questions` DB table + status tracking
+  - More complex UI (side-by-side PDF page + question form)
+
+Cost: Same AI cost as Level 2. Extra infra: one DB table.
+Dev time: ~3–4 days (builds on top of Level 2).
+
+UPGRADE PATH: Level 3 is a clean additive upgrade on Level 2.
+The backend endpoint and frontend upload UI are reused.
+Only additions needed:
+  - DB: pending_questions table (id, examId, pageImage, aiOutput, status, reviewedBy, finalData)
+  - API: GET/PATCH /admin/pending-questions
+  - UI: /admin/pending-questions review screen
+
+
+IMPLEMENTATION NOTES
+--------------------
+Dependencies:
+  - pdf2pic (PDF page → image)
+  - sharp (image processing/resizing before sending to Claude)
+  - @anthropic-ai/sdk (already used for AI tag suggestions)
+
+New endpoint (Level 2):
+  POST /admin/pdf-import
+  - Accepts multipart PDF upload
+  - Converts pages to base64 images
+  - Sends to Claude vision in batches
+  - Returns { questions: ExtractedQuestion[] }
+
+Frontend:
+  - Upload button in existing CsvImport component (admin.tsx)
+  - Loading state with page progress ("Extracting page 3 of 12...")
+  - Extracted rows populate the same preview table as manual CSV
+  - Admin edits/removes rows then hits Import as usual
