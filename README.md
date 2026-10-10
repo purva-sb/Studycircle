@@ -4,7 +4,18 @@ StudyCircle is a collaborative exam-prep platform built for students who want to
 
 **Live app:** [studycircle-staging.onrender.com](https://studycircle-staging.onrender.com/)
 
-![StudyCircle dashboard preview](artifacts/studycircle/public/dashboard-preview.png)
+## Screenshots
+
+![StudyCircle dashboard](artifacts/studycircle/public/image-1791657206527.png)
+
+<div align="center">
+  <img src="artifacts/studycircle/public/image-1791657418013.png" alt="StudyCircle focus room" width="48%" />
+  <img src="artifacts/studycircle/public/image-1791657427416.png" alt="StudyCircle mock exams" width="48%" />
+</div>
+
+<div align="center">
+  <img src="artifacts/studycircle/public/image-1791657463473.png" alt="StudyCircle doubts feed" width="70%" />
+</div>
 
 ## What the app does
 
